@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "MinGW UCRT64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include",
+                "D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include",
+                "D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include",
+                "D:/vcpkg-master/vcpkg-master/packages/nlohmann-json_x64-mingw-static/include",
+                "D:/vcpkg-master/vcpkg-master/packages/zstd_x64-mingw-static/include",
+                "E:/msys/ucrt64/include"
+            ],
+            "defines": [
+                "THREADED",
+                "WIN32",
+                "_WIN32"
+            ],
+            "compilerPath": "E:/msys/ucrt64/bin/g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}

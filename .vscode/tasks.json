@@ -1,0 +1,189 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake configure (Debug)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "build",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-G",
+                "MinGW Makefiles"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "cmake build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "cmake configure (Release)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "build",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-G",
+                "MinGW Makefiles"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "run server",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/rpc_server.exe",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "cmake build"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "run client",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/rpc_client.exe",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "cmake build"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "cppbuild",
+            "label": "编译当前文件 (全库)",
+            "command": "E:\\msys\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "-std=c++23",
+                "-DTHREADED",
+                "-mno-xop",
+                "-D_X86INTRIN_H_INCLUDED",
+                "-D_EMMINTRIN_H_INCLUDED",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-I", "D:/vcpkg-master/vcpkg-master/packages/nlohmann-json_x64-mingw-static/include",
+                "-I", "D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include",
+                "-I", "D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include",
+                "-I", "D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include",
+                "-I", "D:/vcpkg-master/vcpkg-master/packages/zstd_x64-mingw-static/include",
+                "-I", "E:/msys/ucrt64/include",
+                "-I", "${workspaceFolder}/include",
+                "-L", "D:/vcpkg-master/vcpkg-master/packages/zstd_x64-mingw-static/lib",
+                "-L", "D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib",
+                "-L", "D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib",
+                "-L", "D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib",
+                "-L", "E:/msys/ucrt64/lib",
+                "-lprotobuf",
+                "-lzstd",
+                "-lspdlog",
+                "-lzookeeper",
+                "-lhashtable",
+                "-lws2_32",
+                "-lkernel32",
+                "-luser32",
+                "-lgdi32",
+                "-lwinspool",
+                "-lshell32",
+                "-lole32",
+                "-loleaut32",
+                "-luuid",
+                "-lcomdlg32",
+                "-ladvapi32",
+                "-ldbghelp",
+                "-lbcrypt"
+            ],
+            "options": {
+                "cwd": "${fileDirname}",
+                "env": {
+                    "PATH": "E:\\msys\\ucrt64\\bin;${env:PATH}"
+                }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "通用单文件编译，含 zstd/spdlog/zookeeper/json/protobuf 全部库"
+        },
+        {
+            "label": "cmake 编译项目",
+            "type": "shell",
+            "command": "mingw32-make",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/build",
+                "env": {
+                    "PATH": "E:\\msys\\ucrt64\\bin;${env:PATH}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "cmake configure (Debug)"
+            ]
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe 生成活动文件",
+            "command": "E:/msys/ucrt64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-std=c++20"
+            ],
+            "options": {
+                "cwd": "E:/msys/ucrt64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ]
+}

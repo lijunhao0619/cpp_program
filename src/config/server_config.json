@@ -1,0 +1,39 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 8080,
+        "thread_pool_size": 8,
+        "max_connections": 10000,
+        "socket_timeout_ms": 5000
+    },
+    "zk": {
+        "host": "127.0.0.1",
+        "port": 2181,
+        "session_timeout_ms": 4000,
+        "root_path": "/rpc",
+        "services_path": "/rpc/services"
+    },
+    "log": {
+        "dir": "logs",
+        "file": "rpc.log",
+        "level": "info",
+        "max_file_size_mb": 10,
+        "max_files": 5
+    },
+    "serializer": {
+        "type": "protobuf"
+    },
+    "compress": {
+        "enable": true,
+        "threshold": 256,
+        "level": 3
+    },
+    "encrypt": {
+        "enable": false,
+        "public_key_path": "keys/public.pem",
+        "private_key_path": "keys/private.pem"
+    },
+    "balancer": {
+        "strategy": "round_robin"
+    }
+}

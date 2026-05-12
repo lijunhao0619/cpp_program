@@ -1,0 +1,2 @@
+[2026-04-28 17:52:45.219] [file_logger] [info] Hello file!
+[2026-04-28 17:52:45.223] [file_logger] [error] 这条写入后会立刻 flush

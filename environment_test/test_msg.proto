@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package rpc_test;
+
+// 地址
+message Address {
+  string street = 1;
+  string city = 2;
+  int32 zip = 3;
+}
+
+// 联系方式
+message Contact {
+  string email = 1;
+  string phone = 2;
+}
+
+// 用户信息（包含嵌套、枚举、基本类型）
+message User {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  double score = 4;
+  bool active = 5;
+  Address address = 6;           // 嵌套 message
+  repeated string tags = 7;      // repeated 数组
+  Contact contact = 8;
+}
+
+// RPC 请求
+message RpcRequest {
+  string service = 1;
+  string method = 2;
+  int64 request_id = 3;
+  bytes payload = 4;             // 二进制载荷（存放序列化后的参数）
+}
+
+// RPC 响应
+message RpcResponse {
+  int64 request_id = 1;
+  int32 error_code = 2;
+  string error_msg = 3;
+  bytes result = 4;              // 二进制载荷（存放序列化后的返回值）
+}
+
+// 用户列表（测试 repeated message）
+message UserList {
+  repeated User users = 1;
+}

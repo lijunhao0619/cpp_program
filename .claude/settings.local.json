@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /d/zookeeper)",
+      "Read(//d//**)",
+      "Bash(curl -L -o apache-zookeeper-3.9.5.tar.gz \"https://archive.apache.org/dist/zookeeper/zookeeper-3.9.5/apache-zookeeper-3.9.5.tar.gz\")",
+      "Bash(D:/cpp_programs/RPC/environment_test/zookeeper_test.exe)",
+      "Read(//e/vcpkg/installed/x64-windows/include/**)",
+      "Read(//e/vcpkg/packages/zstd_x64-windows/lib/**)",
+      "Bash(ls \"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include/google/protobuf/\" | head -20 && echo \"---\" && ls \"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib/\" | head -10 && echo \"---\" && ls \"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/tools/protobuf/\" 2>/dev/null || echo \"no tools dir\")",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include/google/protobuf/**)",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib/**)",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/tools/protobuf/**)",
+      "Bash(ls \"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/tools/protobuf/\" 2>/dev/null; which protoc 2>/dev/null || echo \"protoc not in PATH\"; ls \"E:/msys/ucrt64/bin/protoc\"* 2>/dev/null || echo \"no protoc in msys bin\"; find \"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/\" -name \"protoc*\" -type f 2>/dev/null | head -10)",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/**)",
+      "Bash(\"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/tools/protobuf/protoc.exe\" --version)",
+      "Bash(\"D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/tools/protobuf/protoc.exe\" --cpp_out=\"D:/cpp_programs/RPC/environment_test\" --proto_path=\"D:/cpp_programs/RPC/environment_test\" \"D:/cpp_programs/RPC/environment_test/test_msg.proto\")",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib/**)",
+      "Bash(grep -E \"\\\\.a$\")",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -fdiagnostics-color=always -g -std=c++23 D:/cpp_programs/RPC/environment_test/protobuf_test.cpp D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -o D:/cpp_programs/RPC/environment_test/protobuf_test.exe -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8_range_x64-mingw-static/include -I E:/msys/ucrt64/include -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8_range_x64-mingw-static/lib -L E:/msys/ucrt64/lib -lprotobuf -lws2_32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32)",
+      "Bash(find \"D:/vcpkg-master/vcpkg-master/packages/utf8_range_x64-mingw-static/include/\" -name \"utf8_validity.h\" 2>/dev/null)",
+      "Read(//d/vcpkg-master/vcpkg-master/packages/utf8_range_x64-mingw-static/**)",
+      "Bash(find \"D:/vcpkg-master/vcpkg-master/\" -name \"utf8_validity.h\" 2>/dev/null && echo \"===\" && find \"D:/vcpkg-master/vcpkg-master/packages/utf8_range_x64-mingw-static/\" -type f 2>/dev/null | head -20)",
+      "Read(//d/vcpkg-master/vcpkg-master/**)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -fdiagnostics-color=always -g -std=c++23 D:/cpp_programs/RPC/environment_test/protobuf_test.cpp D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -o D:/cpp_programs/RPC/environment_test/protobuf_test.exe -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -I E:/msys/ucrt64/include -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib -L E:/msys/ucrt64/lib -lprotobuf)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -fdiagnostics-color=always -g -std=c++23 D:/cpp_programs/RPC/environment_test/protobuf_test.cpp D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -o D:/cpp_programs/RPC/environment_test/protobuf_test.exe -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -I E:/msys/ucrt64/include -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib -L E:/msys/ucrt64/lib -lprotobuf -Wl,--verbose)",
+      "Bash(\"E:/msys/ucrt64/bin/cmake.exe\" --build build)"
+    ]
+  }
+}

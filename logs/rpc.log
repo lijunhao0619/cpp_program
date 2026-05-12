@@ -1,0 +1,27 @@
+[2026-05-07 23:32:23.344] [info] [64072] === Log Module Test ===
+[2026-05-07 23:32:23.344] [info] [64072] info: server started on port 8080
+[2026-05-07 23:32:23.344] [warning] [64072] warn: retry 3/10
+[2026-05-07 23:32:23.344] [error] [64072] error: connection refused, code=500
+[2026-05-07 23:32:23.344] [critical] [64072] critical: out of memory
+[2026-05-07 23:32:23.344] [warning] [64072] 这条 warn 正常显示
+[2026-05-07 23:32:23.345] [info] [63876] Thread1 working
+[2026-05-07 23:32:23.345] [warning] [62164] Thread2 warning
+[2026-05-07 23:32:23.345] [info] [64072] === Test Complete ===
+[2026-05-11 20:24:36.299] [info] [34232] === Log Module Test ===
+[2026-05-11 20:24:36.299] [info] [34232] info: server started on port 8080
+[2026-05-11 20:24:36.299] [warning] [34232] warn: retry 3/10
+[2026-05-11 20:24:36.299] [error] [34232] error: connection refused, code=500
+[2026-05-11 20:24:36.307] [critical] [34232] critical: out of memory
+[2026-05-11 20:24:36.307] [warning] [34232] 这条 warn 正常显示
+[2026-05-11 20:24:36.308] [info] [31764] Thread1 working
+[2026-05-11 20:24:36.308] [warning] [43912] Thread2 warning
+[2026-05-11 20:24:36.308] [info] [34232] === Test Complete ===
+[2026-05-11 20:34:26.093] [info] [43880] === Log Module Test ===
+[2026-05-11 20:34:26.093] [info] [43880] info: server started on port 8080
+[2026-05-11 20:34:26.093] [warning] [43880] warn: retry 3/10
+[2026-05-11 20:34:26.093] [error] [43880] error: connection refused, code=500
+[2026-05-11 20:34:26.093] [critical] [43880] critical: out of memory
+[2026-05-11 20:34:26.093] [warning] [43880] 这条 warn 正常显示
+[2026-05-11 20:34:26.094] [info] [34688] Thread1 working
+[2026-05-11 20:34:26.094] [warning] [34780] Thread2 warning
+[2026-05-11 20:34:26.094] [info] [43880] === Test Complete ===

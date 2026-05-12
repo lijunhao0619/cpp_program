@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gcc -DZK_AVAILABLE -I/e/msys/ucrt64/include zk_test.c -L/e/msys/ucrt64/lib -lzookeeper -lws2_32 -o zk_test.exe)",
+      "Bash(nm /e/msys/ucrt64/lib/libzookeeper.a)",
+      "Bash(# Try *)",
+      "Bash(\"E:/msys/ucrt64/bin/ar.exe\" t *)",
+      "Bash(\"E:/msys/ucrt64/bin/ar.exe\" --version)",
+      "Bash(\"D:/cpp_programs/RPC/test_pb_build/test_pb.exe\")",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -v -g -std=c++23 -c D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -o /tmp/test_msg.o)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -v -g -o /tmp/protobuf_test2.exe /tmp/test_msg.o -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib -lprotobuf)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 -o /tmp/protobuf_test3.exe /tmp/test_msg.o -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib -lprotobuf -Wl,--trace)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 -c D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -o /tmp/test_msg.o)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 -c D:/cpp_programs/RPC/environment_test/protobuf_test.cpp -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -I D:/cpp_programs/RPC/environment_test -o /tmp/protobuf_test.o)",
+      "Bash(E:/msys/ucrt64/bin/ld.exe -plugin E:/msys/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/liblto_plugin.dll -m i386pep -Bdynamic -o /tmp/protobuf_test4.exe E:/msys/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../lib/crt2.o E:/msys/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/crtbegin.o -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib -L D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/lib -L E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0 -L E:/msys/ucrt64/lib/gcc -L E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/lib/../lib -L E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../lib -L E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/lib -L E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/../../.. /tmp/protobuf_test.o /tmp/test_msg.o -lprotobuf -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../lib/default-manifest.o E:/msys/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/crtend.o)",
+      "Bash(\"E:/msys/ucrt64/bin/gcc.exe\" /tmp/simple.c -o /tmp/simple.exe)",
+      "Bash(/tmp/simple.exe)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include /tmp/simple_absl.cpp -o /tmp/simple_absl.exe)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 /tmp/mini_pb2.cpp D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -o /tmp/mini_pb3.exe -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -I D:/cpp_programs/RPC/environment_test -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -lprotobuf)",
+      "Bash(\"E:/msys/ucrt64/bin/gcc.exe\" -c /tmp/dummy.c -o /tmp/dummy.o)",
+      "Bash(\"E:/msys/ucrt64/bin/ar.exe\" rcs *)",
+      "Bash(\"E:/msys/ucrt64/bin/gcc.exe\" /tmp/simple.c -L/tmp -ldummy -o /tmp/test_dummy.exe)",
+      "Bash(E:/msys/ucrt64/bin/gcc.exe /tmp/simple.c D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/lib/libabsl_base.a -o /tmp/test_absl_base.exe)",
+      "Bash(E:/msys/ucrt64/bin/gcc.exe /tmp/simple.c D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib/libprotobuf.a -o /tmp/test_protobuf.exe)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 -c D:/cpp_programs/RPC/environment_test/test_msg.pb.cc -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -o /tmp/test_msg3.o)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -g -std=c++23 -c /tmp/main_mini.cpp -I D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include -I D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include -I D:/cpp_programs/RPC/environment_test -o /tmp/main_mini.o)",
+      "Bash(E:/msys/ucrt64/bin/g++.exe -o /tmp/test_mini_pb.exe /tmp/main_mini.o /tmp/test_msg3.o -L D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/lib -lprotobuf -L E:/msys/ucrt64/lib)",
+      "Bash(/tmp/test_mini_pb.exe)",
+      "Bash(\"E:/msys/ucrt64/bin/objdump.exe\" -f /tmp/test_mini_pb.exe)",
+      "Bash(mkdir -p \"D:/cpp_programs/RPC/environment_test/build\")",
+      "Bash(cp /tmp/CMakeLists_pb.txt \"D:/cpp_programs/RPC/environment_test/CMakeLists.txt\")",
+      "Bash(E:/msys/ucrt64/bin/cmake.exe -B build -G 'MinGW Makefiles' -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg-master/vcpkg-master/scripts/buildsystems/vcpkg.cmake)",
+      "Bash(\"E:/msys/ucrt64/bin/cmake.exe\" --build \"D:/cpp_programs/RPC/environment_test/build\")",
+      "Bash(E:/msys/ucrt64/bin/cmake.exe -B D:/cpp_programs/RPC/environment_test/build -G 'MinGW Makefiles' -S D:/cpp_programs/RPC/environment_test)",
+      "Bash(\"D:/cpp_programs/RPC/environment_test/build/protobuf_test.exe\")",
+      "Bash(\"E:/msys/ucrt64/bin/objdump.exe\" -p \"D:/cpp_programs/RPC/environment_test/build/protobuf_test.exe\")",
+      "Bash(export PATH=\"E:/msys/ucrt64/bin:$PATH\")"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+-isystem "D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include" -isystem "D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include" -isystem "D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include"

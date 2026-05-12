@@ -1,0 +1,28 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.configureOnOpen": true,
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.compilerPath": "E:/msys/ucrt64/bin/g++.exe",
+    "C_Cpp.default.intelliSenseMode": "windows-gcc-x64",
+    "C_Cpp.default.compilerArgs": [
+        "-std=c++20"
+    ],
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include",
+        "D:/vcpkg-master/vcpkg-master/packages/nlohmann-json_x64-mingw-static/include",
+        "D:/vcpkg-master/vcpkg-master/packages/protobuf_x64-mingw-static/include",
+        "D:/vcpkg-master/vcpkg-master/packages/abseil_x64-mingw-static/include",
+        "D:/vcpkg-master/vcpkg-master/packages/utf8-range_x64-mingw-static/include",
+        "D:/vcpkg-master/vcpkg-master/packages/zstd_x64-mingw-static/include",
+        "E:/msys/ucrt64/include",
+        "E:/msys/ucrt64/include/c++/15.2.0",
+        "E:/msys/ucrt64/include/c++/15.2.0/x86_64-w64-mingw32"
+    ],
+    "files.associations": {
+        "*.h": "cpp",
+        "*.hpp": "cpp",
+        "*.ipp": "cpp"
+    }
+}
