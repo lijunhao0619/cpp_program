@@ -1,8 +1,8 @@
-# CookRPC — C++ 高性能 RPC 框架
+# RPC — C++ 高性能 RPC 框架
 
 ## 项目简介
 
-CookRPC 是一个从零构建的 C++ RPC 通信框架，采用分层架构设计，将网络 IO、协议编解码、服务管理、线程调度等关注点彻底分离。框架基于 Boost.Asio 实现跨平台异步网络通信，支持 Protobuf/JSON 双序列化、zstd 压缩、AES-256-GCM 加密，并预留了 ZooKeeper 服务注册与发现的扩展能力。
+RPC 是一个从零构建的 C++ RPC 通信框架，采用分层架构设计，将网络 IO、协议编解码、服务管理、线程调度等关注点彻底分离。框架基于 Boost.Asio 实现跨平台异步网络通信，支持 Protobuf/JSON 双序列化、zstd 压缩、AES-256-GCM 加密，并预留了 ZooKeeper 服务注册与发现的扩展能力。
 
 ### 核心特性
 
