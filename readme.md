@@ -2,22 +2,22 @@
 
 ## 项目简介
 
-CookRPC 是一个从零构建的 C++ RPC 通信框架，采用分层架构设计，将网络 IO、协议编解码、服务管理、线程调度等关注点彻底分离。框架基于 Boost.Asio 实现跨平台异步网络通信，支持 Protobuf/JSON 双序列化、zstd 压缩、AES-256-GCM 加密，并预留了 ZooKeeper 服务注册与发现的扩展能力。
+RPC 是一个从零构建的 C++ RPC 通信框架，采用分层架构设计，将网络 IO、协议编解码、服务管理、线程调度等关注点彻底分离。框架基于 Boost.Asio 实现跨平台异步网络通信，支持 Protobuf/JSON 双序列化、zstd 压缩、AES-256-GCM 加密，并预留了 ZooKeeper 服务注册与发现的扩展能力。
 
 ### 核心特性
 
-| 特性 | 实现 |
-| ---- | ---- |
-| 异步网络 IO | Boost.Asio（Windows IOCP / Linux epoll） |
-| 自定义 RPC 协议 | 20 字节定长帧头 + 变长 Body，大端编码，CRC32 校验 |
-| 双序列化器 | Protobuf 二进制 / JSON 文本，工厂模式切换 |
-| 数据压缩 | zstd，可配置压缩阈值和级别 |
-| 数据加密 | AES-256-GCM 认证加密（OpenSSL） |
-| 并发处理 | 线程池，服务端可配置 worker 数量 |
-| 服务管理 | 单例 ServiceManager，shared_mutex 线程安全 |
-| 连接管理 | 连接池 + shared_ptr 生命周期 + 原子 close |
-| 负载均衡 | 可插拔策略（Round Robin 等） |
-| 日志系统 | spdlog，控制台彩色 + 文件滚动 |
+| 特性              | 实现                                             |
+| :---------------- | :----------------------------------------------- |
+| 异步网络 IO       | Boost.Asio（Windows IOCP / Linux epoll）          |
+| 自定义 RPC 协议   | 20 字节定长帧头 + 变长 Body，大端编码，CRC32 校验 |
+| 双序列化器        | Protobuf / JSON 文本，工厂模式切换                |
+| 数据压缩          | zstd，可配置压缩阈值和级别                        |
+| 数据加密          | AES-256-GCM 认证加密（OpenSSL）                    |
+| 并发处理          | 线程池，服务端可配置 worker 数量                  |
+| 服务管理          | 单例 ServiceManager，shared_mutex 线程安全        |
+| 连接管理          | 连接池 + shared_ptr 生命周期 + 原子 close        |
+| 负载均衡          | 可插拔策略（Round Robin 等）                       |
+| 日志系统          | spdlog，控制台彩色 + 文件滚动                     |
 
 ---
 
@@ -201,26 +201,26 @@ RPC/
 
 ### 开发环境
 
-| 组件 | 版本/路径 |
-| ---- | --------- |
-| OS | Windows 11 |
-| 工具链 | MSYS2 / MinGW-w64 UCRT64 |
-| 编译器 | GCC 15.2.0 (`E:/msys/ucrt64/bin/g++.exe`) |
-| 构建系统 | CMake 3.16+ |
-| 包管理器 | Vcpkg (`D:/vcpkg-master/vcpkg-master/`) |
-| IDE | VSCode |
+| 组件     | 版本/路径                                    |
+| :------- | :------------------------------------------- |
+| OS       | Windows 11                                   |
+| 工具链   | MSYS2 / MinGW-w64 UCRT64                      |
+| 编译器   | GCC 15.2.0 (`E:/msys/ucrt64/bin/g++.exe`)     |
+| 构建系统 | CMake 3.16+                                   |
+| 包管理器 | Vcpkg (`D:/vcpkg-master/vcpkg-master/`)       |
+| IDE      | VSCode                                        |
 
 ### 依赖库
 
-| 库 | 用途 |
-| -- | ---- |
-| Boost 1.90 (Asio) | 异步网络 IO（epoll/IOCP） |
-| Protobuf 6.33.4 | 二进制序列化 |
-| nlohmann/json 3.12.0 | JSON 解析（配置、序列化） |
-| spdlog 1.17.0 | 日志系统 |
-| zstd 1.5.7 | 数据压缩 |
-| OpenSSL | AES-256-GCM 加密 |
-| ZooKeeper C Client 3.9.5 | 服务注册与发现（可选） |
+| 库                      | 用途                         |
+| :---------------------- | :--------------------------- |
+| Boost 1.90 (Asio)       | 异步网络 IO（epoll/IOCP）    |
+| Protobuf 6.33.4         | 二进制序列化                 |
+| nlohmann/json 3.12.0    | JSON 解析（配置、序列化）    |
+| spdlog 1.17.0           | 日志系统                     |
+| zstd 1.5.7              | 数据压缩                     |
+| OpenSSL                 | AES-256-GCM 加密              |
+| ZooKeeper C Client 3.9.5| 服务注册与发现（可选）       |
 
 ---
 
@@ -446,30 +446,30 @@ if (resp.error_code == 0) {
 
 配置项说明：
 
-| 字段 | 类型 | 说明 |
-| ---- | ---- | ---- |
-| `server.host` | string | 监听地址 |
-| `server.port` | int | 监听端口 |
-| `server.thread_pool_size` | int | 线程池 worker 数量 |
-| `server.max_connections` | int | 最大连接数 |
-| `server.socket_timeout_ms` | int | Socket 超时（毫秒） |
-| `log.dir` | string | 日志目录 |
-| `log.file` | string | 日志文件名 |
-| `log.level` | string | 日志级别：trace / debug / info / warn / error |
-| `log.max_file_size_mb` | int | 单个日志文件最大大小 |
-| `log.max_files` | int | 最多保留日志文件数 |
-| `serializer.type` | string | 序列化类型：protobuf / json |
-| `compress.enable` | bool | 是否启用压缩 |
-| `compress.threshold` | int | 压缩阈值（超过此字节数才压缩） |
-| `compress.level` | int | zstd 压缩级别（1-19） |
-| `encrypt.enable` | bool | 是否启用加密 |
-| `encrypt.public_key_path` | string | 公钥文件路径 |
-| `encrypt.private_key_path` | string | 私钥文件路径 |
-| `balancer.strategy` | string | 负载均衡策略 |
-| `zk.host` | string | ZooKeeper 地址 |
-| `zk.port` | int | ZooKeeper 端口 |
-| `zk.session_timeout_ms` | int | ZK 会话超时 |
-| `zk.root_path` | string | ZK 根路径 |
+| 字段                        | 类型   | 说明                                 |
+| :-------------------------- | :----- | :----------------------------------- |
+| `server.host`               | string | 监听地址                             |
+| `server.port`               | int    | 监听端口                             |
+| `server.thread_pool_size`   | int    | 线程池 worker 数量                   |
+| `server.max_connections`    | int    | 最大连接数                           |
+| `server.socket_timeout_ms`  | int    | Socket 超时（毫秒）                  |
+| `log.dir`                   | string | 日志目录                             |
+| `log.file`                  | string | 日志文件名                           |
+| `log.level`                 | string | 日志级别：trace / debug / info / warn / error |
+| `log.max_file_size_mb`      | int    | 单个日志文件最大大小                 |
+| `log.max_files`             | int    | 最多保留日志文件数                   |
+| `serializer.type`           | string | 序列化类型：protobuf / json          |
+| `compress.enable`           | bool   | 是否启用压缩                         |
+| `compress.threshold`        | int    | 压缩阈值（超过此字节数才压缩）       |
+| `compress.level`            | int    | zstd 压缩级别（1-19）                 |
+| `encrypt.enable`            | bool   | 是否启用加密                         |
+| `encrypt.public_key_path`   | string | 公钥文件路径                         |
+| `encrypt.private_key_path`  | string | 私钥文件路径                         |
+| `balancer.strategy`         | string | 负载均衡策略                         |
+| `zk.host`                   | string | ZooKeeper 地址                        |
+| `zk.port`                   | int    | ZooKeeper 端口                        |
+| `zk.session_timeout_ms`     | int    | ZK 会话超时                          |
+| `zk.root_path`              | string | ZK 根路径                            |
 
 ---
 
@@ -498,17 +498,17 @@ cd build
 
 各模块的详细设计文档在 `md/` 目录下：
 
-| 文档 | 内容 |
-| ---- | ---- |
-| [core.md](md/core.md) | 核心模块：RpcServer / RpcClient 架构、线程模型 |
-| [network.md](md/network.md) | 网络层：Connection、MessageCycle、ConnectionManager |
-| [rpc_protocol.md](md/rpc_protocol.md) | 协议：帧格式、字段说明、通信流程、CRC32 |
-| [serializer.md](md/serializer.md) | 序列化：Protobuf / JSON 实现与切换 |
+| 文档                                              | 内容                                         |
+| :------------------------------------------------ | :------------------------------------------- |
+| [core.md](md/core.md)                             | 核心模块：RpcServer / RpcClient 架构、线程模型 |
+| [network.md](md/network.md)                       | 网络层：Connection、MessageCycle、ConnectionManager |
+| [rpc_protocol.md](md/rpc_protocol.md)             | 协议：帧格式、字段说明、通信流程、CRC32       |
+| [serializer.md](md/serializer.md)                 | 序列化：Protobuf / JSON 实现与切换            |
 | [service_registration.md](md/service_registration.md) | 服务注册：Service 基类、ServiceManager 用法 |
-| [compress.md](md/compress.md) | 压缩：zstd API 封装 |
-| [encrypt.md](md/encrypt.md) | 加密：AES-256-GCM 封装 |
-| [thread_pool.md](md/thread_pool.md) | 线程池：任务提交、生命周期 |
-| [load_config.md](md/load_config.md) | 配置加载：JSON 解析、结构绑定 |
-| [service_registry.md](md/service_registry.md) | 服务发现：ZooKeeper 集成 |
-| [conn_balancer.md](md/conn_balancer.md) | 负载均衡：策略模式 |
-| [node_manager.md](md/node_manager.md) | 节点管理 |
+| [compress.md](md/compress.md)                     | 压缩：zstd API 封装                           |
+| [encrypt.md](md/encrypt.md)                       | 加密：AES-256-GCM 封装                         |
+| [thread_pool.md](md/thread_pool.md)               | 线程池：任务提交、生命周期                    |
+| [load_config.md](md/load_config.md)               | 配置加载：JSON 解析、结构绑定                 |
+| [service_registry.md](md/service_registry.md)     | 服务发现：ZooKeeper 集成                       |
+| [conn_balancer.md](md/conn_balancer.md)           | 负载均衡：策略模式                            |
+| [node_manager.md](md/node_manager.md)             | 节点管理                                     |
