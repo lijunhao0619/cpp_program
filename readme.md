@@ -26,106 +26,129 @@ RPC 是一个从零构建的 C++ RPC 通信框架，采用分层架构设计，�
 ### 分层架构图
 
 ```text
- ┌─────────────────────────────────────────────────────────────────┐
- │                        应用入口层                                │
- │   server_main.cpp              client_main.cpp                   │
- │   PingService (业务实现)       调用示例                           │
- ├─────────────────────────────────────────────────────────────────┤
- │                        核心组装层 (core/)                        │
- │   ┌──────────────────┐       ┌──────────────────┐               │
- │   │    RpcServer      │       │    RpcClient      │               │
- │   │  ┌──────────────┐ │       │  ┌──────────────┐ │               │
- │   │  │ MessageCycle │ │       │  │  Read Loop   │ │               │
- │   │  │ ServiceMgr   │ │       │  │  Write Queue │ │               │
- │   │  │ ThreadPool   │ │       │  │  Pending Map │ │               │
- │   │  └──────────────┘ │       │  └──────────────┘ │               │
- │   └──────────────────┘       └──────────────────┘               │
- ├─────────────────────────────────────────────────────────────────┤
- │                        网络通信层 (network/)                     │
- │   Connection  │  ConnectionManager  │  MessageCycle  │  Socket   │
- ├─────────────────────────────────────────────────────────────────┤
- │                        协议层 (protocol/)                        │
- │   RpcHeader (20B)  │  RpcRequest  │  RpcResponse  │  CRC32      │
- ├─────────────────────────────────────────────────────────────────┤
- │                        服务管理层 (service/)                     │
- │   Service (抽象基类)  │  ServiceManager (单例)                   │
- ├─────────────────────────────────────────────────────────────────┤
- │                        基础设施层                                │
- │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐   │
- │   │ serializer│ │ compress │ │ encrypt  │ │ load_config/log  │   │
- │   └──────────┘ └──────────┘ └──────────┘ └──────────────────┘   │
- │   ┌──────────┐ ┌──────────┐ ┌──────────────────────────────┐    │
- │   │thread_pool│ │ registry │ │ conn_balancer                │    │
- │   └──────────┘ └──────────┘ └──────────────────────────────┘    │
- └─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                       Application Layer                          │
+│  server_main.cpp               client_main.cpp                   │
+│  PingService (business logic)  Usage examples                    │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+┌──────────────────────────────┴───────────────────────────────────┐
+│                       Core Layer (core/)                         │
+│                                                                  │
+│  ┌──────────────────────┐       ┌──────────────────────┐         │
+│  │       RpcServer      │       │       RpcClient      │         │
+│  │  ┌─────────────────┐ │       │  ┌─────────────────┐ │         │
+│  │  │  MessageCycle   │ │       │  │   Read Loop     │ │         │
+│  │  │  ServiceMgr     │ │       │  │   Write Queue   │ │         │
+│  │  │  ThreadPool     │ │       │  │   Pending Map   │ │         │
+│  │  └─────────────────┘ │       │  └─────────────────┘ │         │
+│  └──────────────────────┘       └──────────────────────┘         │
+│                                                                  │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+┌──────────────────────────────┴───────────────────────────────────┐
+│                     Network Layer (network/)                     │
+│  Connection  │  ConnectionManager  │  MessageCycle  │  Socket    │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+┌──────────────────────────────┴───────────────────────────────────┐
+│                    Protocol Layer (protocol/)                    │
+│  RpcHeader (20B)  │  RpcRequest  │  RpcResponse  │   CRC32       │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+┌──────────────────────────────┴───────────────────────────────────┐
+│                    Service Layer (service/)                      │
+│  Service (abstract base)  │  ServiceManager (singleton)          │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+┌──────────────────────────────┴───────────────────────────────────┐
+│                    Infrastructure Layer                          │
+│                                                                  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐     │
+│  │serializer│ │ compress │ │ encrypt  │ │ load_config/log  │     │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────────────┘     │
+│  ┌──────────┐ ┌──────────┐ ┌────────────────────────────────┐    │
+│  │thread_pool│ │ registry │ │ conn_balancer                 │    │
+│  └──────────┘ └──────────┘ └────────────────────────────────┘    │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ### 数据流：一次 RPC 调用的完整路径
 
 ```text
-Client                                               Server
-──────                                               ──────
+  Client                                    Server
+  ──────                                    ──────
 
-call("PingService", "Ping", params)
-  │
-  ├─ 1. 构造 RpcRequest
-  │     {service_name, method_name, timeout_ms, params}
-  │
-  ├─ 2. 序列化 RpcRequest → Body 字节流
-  │
-  ├─ 3. 构造 RpcHeader (seq_id=42, body_size, ...)
-  │     帧 = 20B Header + Body
-  │
-  ├─ 4. 写入队列 → async_write ──────────────────────▶  TCP
-  │                                                       │
-  │                                                    5. Connection::async_read
-  │                                                       解析 Header → 读取 Body
-  │                                                       │
-  │                                                    6. RpcServer::on_message()
-  │                                                       │
-  │                                                    7. ThreadPool::enqueue()
-  │                                                       │
-  │                                                    8. process_request():
-  │                                                       ├─ 反序列化 RpcRequest
-  │                                                       ├─ ServiceManager::dispatch()
-  │                                                       │    └─ PingService::handle("Ping", params)
-  │                                                       │       → return "pong"
-  │                                                       └─ 构造 RpcResponse {0, "", "pong"}
-  │                                                       │
-  │                                                    9. send_response():
-  │                                                       构造 Response 帧 → conn->send()
-  │                                                       │
-  ◀─── async_read 收到 Response ◀────────────────────  TCP
-  │
-  ├─ 10. 解析 Header, 读取 Body
-  │
-  ├─ 11. 反序列化 RpcResponse
-  │
-  ├─ 12. pending_[42]->promise.set_value(response)
-  │
-  └─ 13. future.get() → RpcResponse {0, "", "pong"}
+  call("PingService", "Ping", params)
+    │
+    ├─ 1. 构造 RpcRequest
+    │     {service_name, method_name, timeout_ms, params}
+    │
+    ├─ 2. 序列化 RpcRequest → Body 字节流
+    │
+    ├─ 3. 构造 RpcHeader (seq_id, body_size, ...)
+    │     帧 = 20B Header + Body
+    │
+    └─ 4. 写入队列 → async_write ────────────────▶  TCP
+                                                       │
+                                                    5. Connection::do_read_header
+                                                       │
+                                                    6. RpcServer::on_message()
+                                                       │
+                                                    7. ThreadPool::enqueue()
+                                                       │
+                                                    8. process_request()
+                                                       ├─ 反序列化 RpcRequest
+                                                       ├─ ServiceManager::dispatch()
+                                                       │    └─ handle("Ping", params)
+                                                       └─ 构造 RpcResponse
+                                                       │
+                                                    9. send_response() → conn->send()
+                                                       │
+    ◀──────── async_read 收到 Response ◀───────────  TCP
+    │
+    ├─ 10. 解析 Header + Body
+    │
+    ├─ 11. 反序列化 RpcResponse
+    │
+    ├─ 12. pending_[seq_id]->promise.set_value()
+    │
+    └─ 13. future.get() → RpcResponse
 ```
 
 ### 线程模型
 
-```text
-服务端:
-  main thread               server thread              thread pool (N workers)
-  ──────────                ──────────────              ─────────────────────
-  信号等待                  io_context.run()            [worker 1] 从队列取任务
-  sleep(500ms)              ├─ acceptor 循环              process_request()
-  直到 SIGINT               ├─ 每连接读循环                ServiceManager::dispatch()
-  server.stop()             └─ 消息回调                    send_response()
-                                                      [worker 2] ...
-                                                      [worker N] ...
+服务端 (Server)
 
-客户端:
-  main thread               io_thread
-  ──────────                ─────────
-  调用 call()                io_context.run()
-  等待 future.get()         ├─ 持续读取循环 (read loop)
-  处理响应                   │   do_read_header → do_read_body → 匹配 pending → 循环
-                            └─ 写入队列处理 (write chain)
+```text
+┌─────────────────┐  ┌──────────────────────┐  ┌──────────────────────────┐
+│   main thread   │  │    server thread     │  │  thread pool (N workers) │
+│   ──────────    │  │    ──────────────    │  │  ──────────────────────  │
+│                 │  │                      │  │                          │
+│   wait signal   │  │  io_context.run()    │  │   [worker 1]             │
+│   sleep(500ms)  │  │  ├─ accept loop      │  │    dequeue task          │
+│   until SIGINT  │  │  ├─ read loop        │  │    process_request()     │
+│   server.stop() │  │  └─ on_message       │  │    dispatch()            │
+│                 │  │                      │  │    send_response()       │
+└─────────────────┘  └──────────────────────┘  │                          │
+                                               │  [worker 2 ... N]        │
+                                               └──────────────────────────┘
+
+客户端 (Client)
+
+┌─────────────────┐  ┌──────────────────────────────┐
+│   main thread   │  │        io_thread             │
+│   ──────────    │  │        ─────────             │
+│                 │  │                              │
+│   call()        │  │  io_context.run()            │
+│   future.get()  │  │  ├─ read loop                │
+│   process result│  │  │   do_read_header          │
+│                 │  │  │   → do_read_body          │
+│                 │  │  │   → match pending         │
+│                 │  │  │   → loop                  │
+│                 │  │  └─ write chain              │
+└─────────────────┘  └──────────────────────────────┘
 ```
 
 ---
