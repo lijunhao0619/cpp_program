@@ -1,4 +1,4 @@
-# CookRPC — C++ 高性能 RPC 框架
+# RPC — C++ 高性能 RPC 框架
 
 ## 项目简介
 
