@@ -3,59 +3,112 @@ set -e
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CLIENT_BIN="$ROOT_DIR/build/rpc_client.exe"
-DURATION_FILE="$ROOT_DIR/build/stress_durations.txt"
+export PATH="/e/msys/ucrt64/bin:$PATH"
+RESULTS_DIR="$ROOT_DIR/build/stress_results"
 
-# Defaults
 CONCURRENT=${1:-10}
 REQUESTS=${2:-100}
 
 echo "=== RPC Stress Test ==="
 echo "Concurrent clients: $CONCURRENT"
 echo "Requests per client: $REQUESTS"
-echo "Total requests:     $((CONCURRENT * REQUESTS))"
+echo "Total requests:      $((CONCURRENT * REQUESTS))"
 echo ""
 
 if [ ! -f "$CLIENT_BIN" ]; then
     echo "ERROR: rpc_client.exe not found at $CLIENT_BIN"
-    echo "Run 'bash rpc_build.sh' first."
     exit 1
 fi
 
-# Clear duration file
-> "$DURATION_FILE"
+# 检查服务端是否在运行（跨平台：netstat + grep）
+SERVER_HOST="${2:-127.0.0.1}"
+SERVER_PORT="${3:-8080}"
+if ! netstat -ano 2>/dev/null | grep -q ":$SERVER_PORT.*LISTENING"; then
+    echo "WARNING: port $SERVER_PORT may not be listening"
+    echo "Make sure server is running: ./build/rpc_server.exe"
+fi
 
-START_MS=$(date +%s%3N)
+rm -rf "$RESULTS_DIR"
+mkdir -p "$RESULTS_DIR"
 
-# Launch concurrent clients
+echo "Launching $CONCURRENT concurrent clients..."
+START_EPOCH=$(date +%s%3N)
+
+# ── 启动并发客户端 ──
 for i in $(seq 1 $CONCURRENT); do
     (
-        for j in $(seq 1 $REQUESTS); do
-            "$CLIENT_BIN" > /dev/null 2>&1
-        done
+        "$CLIENT_BIN" --stress "$REQUESTS" > "$RESULTS_DIR/result_$i.txt" 2>&1
     ) &
 done
 
-# Wait for all background jobs
-echo "Running $CONCURRENT clients x $REQUESTS requests..."
 wait
+END_EPOCH=$(date +%s%3N)
+WALL_MS=$((END_EPOCH - START_EPOCH))
 
-END_MS=$(date +%s%3N)
-TOTAL_REQUESTS=$((CONCURRENT * REQUESTS))
-ELAPSED_MS=$((END_MS - START_MS))
-ELAPSED_S=$((ELAPSED_MS / 1000)).$((ELAPSED_MS % 1000))
+# ── 聚合结果 ──
+total_success=0
+total_fail=0
+total_qps=0
+sum_avg=0
+sum_min=0
+sum_max=0
+clients_ok=0
+clients_fail=0
 
-if [ "$ELAPSED_MS" -gt 0 ]; then
-    THROUGHPUT=$((TOTAL_REQUESTS * 1000 / ELAPSED_MS))
-else
-    THROUGHPUT="N/A"
-fi
+# awk helper for key=value parsing
+parse_val() {
+    echo "$1" | awk -v key="$2" '{
+        for (i=1; i<=NF; i++) {
+            split($i, kv, "=")
+            if (kv[1] == key) print kv[2]
+        }
+    }'
+}
+
+for f in "$RESULTS_DIR"/result_*.txt; do
+    line=$(cat "$f")
+    if echo "$line" | grep -q "STRESS OK"; then
+        clients_ok=$((clients_ok + 1))
+
+        success=$(parse_val "$line" "success")
+        fail=$(parse_val "$line" "fail")
+        qps=$(parse_val "$line" "qps")
+        avg=$(parse_val "$line" "avg_ms")
+        min=$(parse_val "$line" "min_ms")
+        max=$(parse_val "$line" "max_ms")
+
+        total_success=$((total_success + success))
+        total_fail=$((total_fail + fail))
+        sum_avg=$(awk "BEGIN { printf \"%.3f\", $sum_avg + $avg }")
+
+        # track overall min/max across clients
+        if [ "$clients_ok" -eq 1 ]; then
+            overall_min=$min
+            overall_max=$max
+        else
+            overall_min=$(awk "BEGIN { if ($min < $overall_min) printf \"%.3f\", $min; else printf \"%.3f\", $overall_min }")
+            overall_max=$(awk "BEGIN { if ($max > $overall_max) printf \"%.3f\", $max; else printf \"%.3f\", $overall_max }")
+        fi
+    else
+        clients_fail=$((clients_fail + 1))
+        echo "  FAILED client: $(cat $f)"
+    fi
+done
+
+avg_latency=$(awk "BEGIN { if ($clients_ok > 0) printf \"%.1f\", $sum_avg / $clients_ok; else print \"N/A\" }")
+total_qps=$((total_success * 1000 / (WALL_MS > 0 ? WALL_MS : 1)))
+success_rate=$(awk "BEGIN { t=$total_success + $total_fail; if (t > 0) printf \"%.1f\", $total_success * 100 / t; else print \"N/A\" }")
 
 echo ""
 echo "=== Results ==="
-echo "Total time:    ${ELAPSED_S}s"
-echo "Throughput:    ${THROUGHPUT} req/s"
-echo "Concurrency:   $CONCURRENT"
-echo "Req/client:    $REQUESTS"
+echo "Wall time:         ${WALL_MS}ms"
+echo "Clients OK:        $clients_ok / $CONCURRENT"
+echo "Total success:     $total_success"
+echo "Total fail:        $total_fail"
+echo "Success rate:      ${success_rate}%"
+echo "Overall QPS:       ${total_qps} req/s"
+echo "Avg latency:       ${avg_latency}ms"
+echo "Min latency:       ${overall_min:-N/A}ms"
+echo "Max latency:       ${overall_max:-N/A}ms"
 echo ""
-echo "NOTE: server/client are currently stubs (print-and-exit)."
-echo "Real RPC stress testing requires server/client implementation."
+echo "Per-client reports: $RESULTS_DIR/"
