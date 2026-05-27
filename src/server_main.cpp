@@ -1,3 +1,8 @@
+#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,6 +11,7 @@
 #include <chrono>
 #include <csignal>
 #include <atomic>
+#include <functional>
 
 #include "load_config/load_config.h"
 #include "load_config/log_init.h"
@@ -27,17 +33,17 @@ public:
         }
         if (method == "Stats") {
             return R"({"status":"running","connections":)" +
-                   std::to_string(conn_count_->load()) + "}";
+                   std::to_string(get_conn_count_()) + "}";
         }
         throw std::runtime_error("unknown method: " + method);
     }
 
-    void set_conn_counter(std::atomic<size_t>* counter) {
-        conn_count_ = counter;
+    void set_conn_counter(std::function<size_t()> counter_fn) {
+        get_conn_count_ = std::move(counter_fn);
     }
 
 private:
-    std::atomic<size_t>* conn_count_ = nullptr;
+    std::function<size_t()> get_conn_count_ = [] { return 0; };
 };
 
 namespace {
@@ -49,6 +55,10 @@ void signal_handler(int) {
 }
 
 int main(int argc, char* argv[]) {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
     // ── 解析命令行参数 ──
     std::string config_path = "src/config/server_config.json";
     uint16_t override_port = 0;
@@ -94,6 +104,7 @@ int main(int argc, char* argv[]) {
 
     // ── 注册服务 ──
     auto ping = std::make_shared<PingService>();
+    ping->set_conn_counter([&server] { return server.connection_count(); });
     server.register_service(ping);
     RPC_INFO("Registered PingService (methods: Ping, Stats)");
 
